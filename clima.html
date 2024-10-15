@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clima en Tiempo Real</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.7.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(to right, #87CEFA, #B0E0E6);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 20px 0;
+            color: #2E8B57;
+            text-align: center;
+        }
+        .weather-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            width: 300px;
+            text-align: center;
+        }
+        .temperature {
+            font-size: 2em;
+            margin: 10px 0;
+            color: #FF4500;
+        }
+        .description {
+            font-size: 1.2em;
+            color: #4682B4;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">Autosuficiencia<span>Agrop.</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">Nosotros</a></li>
+                <li class="nav-item"><a class="nav-link" href="services.html">Artículos</a></li>
+                <li class="nav-item"><a class="nav-link" href="gallery.html">Imágenes</a></li>
+                <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="cultivos.html">Cultivos</a></li>
+                <li class="nav-item"><a class="nav-link active" href="clima.html">Clima</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Clima en Tiempo Real</h1>
+        <div id="weather" class="weather-card">
+            <!-- Weather information will be displayed here -->
+            <p>Cargando...</p>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p>&copy; 2023 Autosuficiencia Agrop. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const apiKey = 'a6844f4a2c23c5e4ff6b19187ad62229'; // Replace with your OpenWeatherMap API key
+        const weatherDiv = document.getElementById('weather');
+        // Get user's location
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            // Call OpenWeatherMap API
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=es&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    const weather = `
+                        <h2>${data.name}</h2>
+                        <p class="temperature">${data.main.temp} °C</p>
+                        <p class="description">${data.weather[0].description}</p>
+                    `;
+                    weatherDiv.innerHTML = weather;
+                })
+                .catch(error => {
+                    weatherDiv.innerHTML = '<p>No se pudo obtener el clima.</p>';
+                });
+        }, () => {
+            weatherDiv.innerHTML = '<p>No se pudo obtener la ubicación.</p>';
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
